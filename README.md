@@ -58,7 +58,40 @@ The scraper performs the following tasks:
 1. **Extracts Data**: Scrapes `<h1>` titles from a target website using BeautifulSoup.
 2. **Stores Data in RDS**: Saves the scraped titles into a MySQL database table.
 3. **Backups Data to S3**: Writes titles to a `.txt` file and uploads it to an S3 bucket.
+   
 Script Location: `/scraper.py`
+
+## How to View Scraped Data
+### Option 1: View Uploaded Backup in S3
+* Use the AWS CLI to list objects in the S3 bucket:
+```bash
+aws s3 ls s3://<your-s3-bucket-name>/ --recursive
+```
+* Download the backup file (e.g., scraped_data.txt):
+```bash
+aws s3 cp s3://<your-s3-bucket-name>/scraped_data.txt ./scraped_data.txt
+```
+* View the file content locally:
+```bash
+cat scraped_data.txt
+```
+## Option 2: Using MySQL Client (CLI)
+* SSH into your EC2 instance:
+```bash
+ssh -i <your-key-pair.pem> ec2-user@<EC2-Public-IP>
+```
+* Connect to the RDS database:
+```bash
+mysql -h <RDS-Endpoint> -u <db-username> -p
+```
+* Select the database:
+```sql
+USE <database-name>;
+```
+* Query the scraped data:
+```sql
+SELECT * FROM scraped_titles;
+```
 
 ## AWS Services Used
 + **IAM**: Role and policies for secure access.
@@ -82,4 +115,4 @@ This project was developed by **Nsisong Etim**.
 
 Feel free to connect on [LinkedIn](https://www.linkedin.com/in/nsisong-etim-64589126a) for collaboration.
 
-
+## Happy Scraping!
